@@ -1,0 +1,9 @@
+Passo a Passo
+
+1.Criar Projeto 
+	1 App MVC para apresentaçao
+	2 Blank library para proj de Business e um para Data
+
+2. Criar as Models em Business e Configurar o Db Context em Data (n esquecer do EF Core)
+	2.1 Mapear as Entidades em Mappings para aplicar as configs na hora de criar o Banco
+

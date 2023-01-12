@@ -6,4 +6,8 @@ Passo a Passo
 
 2. Criar as Models em Business e Configurar o Db Context em Data (n esquecer do EF Core)
 	2.1 Mapear as Entidades em Mappings para aplicar as configs na hora de criar o Banco
+SEMPRE TER AS MESMAS VERSOES DOS PACOTES ENTITY
+	2.2 Configurar o Db Context no Program.cs, referenciar ele na app principal e realizar a migration
+				-- Add-Migration Initial -Verbose -Context NomeDoBanco
+				-- Update-Database -Context NomeDoBanco
 

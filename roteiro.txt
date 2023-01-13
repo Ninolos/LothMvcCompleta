@@ -11,3 +11,6 @@ SEMPRE TER AS MESMAS VERSOES DOS PACOTES ENTITY
 				-- Add-Migration Initial -Verbose -Context NomeDoBanco
 				-- Update-Database -Context NomeDoBanco
 
+3. Criar Pattern Repository, feito para não injetar o DbContext diretamente nas Controllers
+	3.1 Criar Interfaze na camada de negócios IRepository com metodos genericos que vao ser usados por todas as Classes
+	3.2 Criar uma Interface de Repository para cada classe que herda de IRepository, la vc adiciona os metodos especificos para a classe

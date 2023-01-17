@@ -14,3 +14,9 @@ SEMPRE TER AS MESMAS VERSOES DOS PACOTES ENTITY
 3. Criar Pattern Repository, feito para não injetar o DbContext diretamente nas Controllers
 	3.1 Criar Interfaze na camada de negócios IRepository com metodos genericos que vao ser usados por todas as Classes
 	3.2 Criar uma Interface de Repository para cada classe que herda de IRepository, la vc adiciona os metodos especificos para a classe
+	3.3 Criar Repository generico e para cada classe no proj de Data, implementando os Metodos das Interfaces. //N esquecer do AsNoTracking e Include faz Joins
+	3.4 Em Startup ou Program adicionar os Services da Injeção de dependencia 
+				//builder.Services.AddScoped<LothDbContext>();
+				builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
+
+

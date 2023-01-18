@@ -19,4 +19,11 @@ SEMPRE TER AS MESMAS VERSOES DOS PACOTES ENTITY
 				//builder.Services.AddScoped<LothDbContext>();
 				builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 
+4. Mapear as Models para ViewModels com autoMapper, feito para nao jogar as Models direto na View pq a Model é uma entidade de negocio entao o ideial é vc mexer ex: DataAnnotations na VM
+		4.1 fazer as ViewModels com base nas models e colocar os DataAnnotations
+		4.2 instalar o AutoMapper na camada de apresentação install-Package automapper.extensions.microsoft.dependencyinjection
+		4.3 configurar o AutoMapper na StartUp, //builder.Services.AddAutoMapper(typeof(Program));
+		4.4 Criar uma classe para Configurar o AutoMapper
+
+
 

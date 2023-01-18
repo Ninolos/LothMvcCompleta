@@ -1,0 +1,29 @@
+Passo a Passo
+
+1.Criar Projeto 
+	1 App MVC para apresentaçao
+	2 Blank library para proj de Business e um para Data
+
+2. Criar as Models em Business e Configurar o Db Context em Data (n esquecer do EF Core)
+	2.1 Mapear as Entidades em Mappings para aplicar as configs na hora de criar o Banco
+SEMPRE TER AS MESMAS VERSOES DOS PACOTES ENTITY
+	2.2 Configurar o Db Context no Program.cs, referenciar ele na app principal e realizar a migration
+				-- Add-Migration Initial -Verbose -Context NomeDoBanco
+				-- Update-Database -Context NomeDoBanco
+
+3. Criar Pattern Repository, feito para não injetar o DbContext diretamente nas Controllers
+	3.1 Criar Interfaze na camada de negócios IRepository com metodos genericos que vao ser usados por todas as Classes
+	3.2 Criar uma Interface de Repository para cada classe que herda de IRepository, la vc adiciona os metodos especificos para a classe
+	3.3 Criar Repository generico e para cada classe no proj de Data, implementando os Metodos das Interfaces. //N esquecer do AsNoTracking e Include faz Joins
+	3.4 Em Startup ou Program adicionar os Services da Injeção de dependencia 
+				//builder.Services.AddScoped<LothDbContext>();
+				builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
+
+4. Mapear as Models para ViewModels com autoMapper, feito para nao jogar as Models direto na View pq a Model é uma entidade de negocio entao o ideial é vc mexer ex: DataAnnotations na VM
+		4.1 fazer as ViewModels com base nas models e colocar os DataAnnotations
+		4.2 instalar o AutoMapper na camada de apresentação install-Package automapper.extensions.microsoft.dependencyinjection
+		4.3 configurar o AutoMapper na StartUp, //builder.Services.AddAutoMapper(typeof(Program));
+		4.4 Criar uma classe para Configurar o AutoMapper
+
+
+

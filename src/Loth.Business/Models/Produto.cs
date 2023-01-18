@@ -1,0 +1,19 @@
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace AppLothMVC.Models
+{
+    public class Produto : Entity
+    {
+        public Guid FornecedorId { get; set; }        
+        public string Nome { get; set; }                
+        public string Descricao { get; set; }        
+        public string Imagem { get; set; }        
+        public decimal Valor { get; set; }
+        public DateTime DataCadastro { get; set; }        
+        public bool Ativo { get; set; }
+
+        /* Relação EF para produto ter um Fornecedor */
+        public Fornecedor Fornecedor { get; set; }
+    }
+}

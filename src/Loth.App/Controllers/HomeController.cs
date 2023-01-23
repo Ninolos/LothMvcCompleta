@@ -1,5 +1,4 @@
-﻿using Loth.App.Models;
-using Loth.App.ViewModels;
+﻿using Loth.App.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

@@ -25,5 +25,7 @@ SEMPRE TER AS MESMAS VERSOES DOS PACOTES ENTITY
 		4.3 configurar o AutoMapper na StartUp, //builder.Services.AddAutoMapper(typeof(Program));
 		4.4 Criar uma classe para Configurar o AutoMapper
 
-
+5. Scaffolding Controllers e Views, utilizar um contexto e usar como Model as VIEWMODELS
+	5.1 Instanciar a Interface de repositório da respectiva Model, ex, Fornecedor Controller recebe o IFornecedorRepository e injetar, fzd injeção de dependencia do repositorio no Construtor
+	5.2 na Controller, tbm injetar o Automapper, e no return da Action mapear a ViewModel, ex //return View(_mapper.Map<IEnumerable<FornecedorViewModel>> (await _fornecedorRepository.ObterTodos()));
 

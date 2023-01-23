@@ -43,7 +43,10 @@ namespace Loth.App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(FornecedorViewModel fornecedorViewModel)
         {
-            if (!ModelState.IsValid) return View(fornecedorViewModel);
+            if (!ModelState.IsValid)
+            {
+                return View(fornecedorViewModel);
+            }
 
             //Mapeando a entrada dos dados para model Fornecedor
 
@@ -70,9 +73,15 @@ namespace Loth.App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, FornecedorViewModel fornecedorViewModel)
         {
-            if (id != fornecedorViewModel.Id) return NotFound();
+            if (id != fornecedorViewModel.Id)
+            {
+                return NotFound();
+            }
 
-            if (!ModelState.IsValid) return View(fornecedorViewModel);
+            if (!ModelState.IsValid)
+            {
+                return View(fornecedorViewModel);
+            }
 
             var fornecedor = _mapper.Map<Fornecedor>(fornecedorViewModel);
 
@@ -101,8 +110,11 @@ namespace Loth.App.Controllers
         {            
             var fornecedorViewModel = await ObterFornecedorEndereco(id);
 
-            if (fornecedorViewModel == null) return NotFound();
-
+            if (fornecedorViewModel == null)
+            {
+                return NotFound();
+            }
+            
             await _fornecedorRepository.Remover(id);                              
             
             return RedirectToAction("Index");

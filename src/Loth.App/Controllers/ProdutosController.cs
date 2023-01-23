@@ -9,6 +9,7 @@ using Loth.App.Data;
 using Loth.App.ViewModels;
 using Loth.Business.Interfaces;
 using AutoMapper;
+using AppLothMVC.Models;
 
 namespace Loth.App.Controllers
 {
@@ -27,14 +28,13 @@ namespace Loth.App.Controllers
  
         public async Task<IActionResult> Index()
         {
-            var produtos = await _produtoRepository.ObterProdutosFornecedores();
-
-            return View(_mapper.Map<ProdutoViewModel>(produtos));
+            return View(_mapper.Map<IEnumerable<ProdutoViewModel>>(await _produtoRepository.ObterProdutosFornecedores()));
         }
   
         public async Task<IActionResult> Details(Guid id)
         {
-            var produtoViewModel = await _produtoRepository.ObterProdutoFornecedor(id);
+            //ObterProduto é um metodo privado que pode ser reutilizado por
+            var produtoViewModel = await ObterProduto(id);
                 
             if (produtoViewModel == null)
             {
@@ -44,110 +44,86 @@ namespace Loth.App.Controllers
             return View(produtoViewModel);
         }
        
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["FornecedorId"] = new SelectList(_context.Set<FornecedorViewModel>(), "Id", "Documento");
-            return View();
+            var produtoViewModel = await PopularFornecedores(new ProdutoViewModel());
+
+            return View(produtoViewModel);
         }
        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FornecedorId,Nome,Descricao,Imagem,Valor,Ativo")] ProdutoViewModel produtoViewModel)
+        public async Task<IActionResult> Create(ProdutoViewModel produtoViewModel)
         {
-            if (ModelState.IsValid)
+            produtoViewModel = await PopularFornecedores(produtoViewModel);
+
+            if (!ModelState.IsValid)
             {
-                produtoViewModel.Id = Guid.NewGuid();
-                _context.Add(produtoViewModel);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return View(produtoViewModel);
             }
-            ViewData["FornecedorId"] = new SelectList(_context.Set<FornecedorViewModel>(), "Id", "Documento", produtoViewModel.FornecedorId);
+
+            await _produtoRepository.Adicionar(_mapper.Map<Produto>(produtoViewModel));           
+            
             return View(produtoViewModel);
         }
         
-        public async Task<IActionResult> Edit(Guid? id)
-        {
-            if (id == null || _context.ProdutoViewModel == null)
-            {
-                return NotFound();
-            }
+        public async Task<IActionResult> Edit(Guid id)
+        {          
+            var produtoViewModel = await ObterProduto(id);
 
-            var produtoViewModel = await _context.ProdutoViewModel.FindAsync(id);
             if (produtoViewModel == null)
             {
                 return NotFound();
-            }
-            ViewData["FornecedorId"] = new SelectList(_context.Set<FornecedorViewModel>(), "Id", "Documento", produtoViewModel.FornecedorId);
+            }            
+
             return View(produtoViewModel);
         }
        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,FornecedorId,Nome,Descricao,Imagem,Valor,Ativo")] ProdutoViewModel produtoViewModel)
+        public async Task<IActionResult> Edit(Guid id, ProdutoViewModel produtoViewModel)
         {
             if (id != produtoViewModel.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(produtoViewModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProdutoViewModelExists(produtoViewModel.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+            if (!ModelState.IsValid)
+            {                
+                return View(produtoViewModel);
             }
-            ViewData["FornecedorId"] = new SelectList(_context.Set<FornecedorViewModel>(), "Id", "Documento", produtoViewModel.FornecedorId);
-            return View(produtoViewModel);
+
+            await _produtoRepository.Atualizar(_mapper.Map<Produto>(produtoViewModel));
+            
+            return RedirectToAction("Index");
         }
         
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null || _context.ProdutoViewModel == null)
+            var produto = await ObterProduto(id);
+
+            if(produto == null)
             {
                 return NotFound();
             }
 
-            var produtoViewModel = await _context.ProdutoViewModel
-                .Include(p => p.Fornecedor)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (produtoViewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(produtoViewModel);
+            return View(produto);
         }
                 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            if (_context.ProdutoViewModel == null)
+            var produto = await ObterProduto(id);
+
+            if (produto == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.ProdutoViewModel'  is null.");
+                return NotFound();
             }
-            var produtoViewModel = await _context.ProdutoViewModel.FindAsync(id);
-            if (produtoViewModel != null)
-            {
-                _context.ProdutoViewModel.Remove(produtoViewModel);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            await _produtoRepository.Remover(id);
+                        
+            return RedirectToAction("Index");
         }
 
         private async Task<ProdutoViewModel> ObterProduto(Guid id)
@@ -157,5 +133,14 @@ namespace Loth.App.Controllers
 
             return produto;
         }
+
+        //Popular os fornecedores a partir de qualquer produto
+        private async Task<ProdutoViewModel> PopularFornecedores(ProdutoViewModel produto)
+        {
+            produto.Fornecedores = _mapper.Map<IEnumerable<FornecedorViewModel>>(await _fornecedorRepository.ObterTodos());
+
+            return produto;
+        }
+
     }
 }

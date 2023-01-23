@@ -10,5 +10,6 @@ namespace Loth.App.Data
             : base(options)
         {
         }       
+        public DbSet<Loth.App.ViewModels.ProdutoViewModel> ProdutoViewModel { get; set; }
     }
 }

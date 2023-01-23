@@ -21,7 +21,7 @@ namespace Loth.App.ViewModels
         [Required(ErrorMessage = "O Campo é obrigatório")]
         [StringLength(1000, ErrorMessage = "O Campo precisa ter entre 2 e 1000 caracteres", MinimumLength = 2)]
         public string Descricao { get; set; }
-        //public IFormFile ImagemUpload { get; set; }
+        public IFormFile ImagemUpload { get; set; }
         public string Imagem { get; set; }
 
         [Required(ErrorMessage = "O Campo é obrigatório")]
@@ -33,5 +33,7 @@ namespace Loth.App.ViewModels
         [DisplayName("Ativo?")]
         public bool Ativo { get; set; }        
         public FornecedorViewModel Fornecedor { get; set; }
+
+        public IEnumerable<FornecedorViewModel> Fornecedores { get; set; }
     }
 }

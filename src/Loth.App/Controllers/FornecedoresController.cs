@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Loth.App.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using Loth.App.ViewModels;
 using Loth.Business.Interfaces;
 using AutoMapper;
+using AppLothMVC.Models;
 
 namespace Loth.App.Controllers
-{
-    public class FornecedoresController : Controller
+{    
+    public class FornecedoresController : BaseController
     {
         private readonly IFornecedorRepository _fornecedorRepository;
         private readonly IMapper _mapper;
@@ -47,26 +41,24 @@ namespace Loth.App.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Documento,TipoFornecedor,Ativo")] FornecedorViewModel fornecedorViewModel)
+        public async Task<IActionResult> Create(FornecedorViewModel fornecedorViewModel)
         {
-            if (ModelState.IsValid)
-            {
-                fornecedorViewModel.Id = Guid.NewGuid();
-                _context.Add(fornecedorViewModel);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(fornecedorViewModel);
+            if (!ModelState.IsValid) return View(fornecedorViewModel);
+
+            //Mapeando a entrada dos dados para model Fornecedor
+
+            var fornecedor = _mapper.Map<Fornecedor>(fornecedorViewModel);
+
+            await _fornecedorRepository.Adicionar(fornecedor);
+                 
+            return RedirectToAction("Index");
+            
         }
         
-        public async Task<IActionResult> Edit(Guid? id)
-        {
-            if (id == null || _context.FornecedorViewModel == null)
-            {
-                return NotFound();
-            }
+        public async Task<IActionResult> Edit(Guid id)
+        {           
+            var fornecedorViewModel = await ObterFornecedorProdutosEndereco(id);
 
-            var fornecedorViewModel = await _context.FornecedorViewModel.FindAsync(id);
             if (fornecedorViewModel == null)
             {
                 return NotFound();
@@ -76,45 +68,25 @@ namespace Loth.App.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Nome,Documento,TipoFornecedor,Ativo")] FornecedorViewModel fornecedorViewModel)
+        public async Task<IActionResult> Edit(Guid id, FornecedorViewModel fornecedorViewModel)
         {
-            if (id != fornecedorViewModel.Id)
-            {
-                return NotFound();
-            }
+            if (id != fornecedorViewModel.Id) return NotFound();
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(fornecedorViewModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!FornecedorViewModelExists(fornecedorViewModel.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(fornecedorViewModel);
+            if (!ModelState.IsValid) return View(fornecedorViewModel);
+
+            var fornecedor = _mapper.Map<Fornecedor>(fornecedorViewModel);
+
+            await _fornecedorRepository.Atualizar(fornecedor);
+
+            return RedirectToAction("Index");
+            
+            
         }
         
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null || _context.FornecedorViewModel == null)
-            {
-                return NotFound();
-            }
-
-            var fornecedorViewModel = await _context.FornecedorViewModel
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var fornecedorViewModel = await ObterFornecedorEndereco(id);
+                
             if (fornecedorViewModel == null)
             {
                 return NotFound();
@@ -126,30 +98,25 @@ namespace Loth.App.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
-        {
-            if (_context.FornecedorViewModel == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.FornecedorViewModel'  is null.");
-            }
-            var fornecedorViewModel = await _context.FornecedorViewModel.FindAsync(id);
-            if (fornecedorViewModel != null)
-            {
-                _context.FornecedorViewModel.Remove(fornecedorViewModel);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        {            
+            var fornecedorViewModel = await ObterFornecedorEndereco(id);
 
-        private bool FornecedorViewModelExists(Guid id)
-        {
-          return _context.FornecedorViewModel.Any(e => e.Id == id);
-        }
+            if (fornecedorViewModel == null) return NotFound();
+
+            await _fornecedorRepository.Remover(id);                              
+            
+            return RedirectToAction("Index");
+        }        
 
         //Metodo para retornar sempre o Fornecedor e Endereco por id, usado nos outros metodos
         private async Task<FornecedorViewModel> ObterFornecedorEndereco(Guid id)
         {
             return _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.ObterFornecedorEndereco(id));
+        }
+
+        private async Task<FornecedorViewModel> ObterFornecedorProdutosEndereco(Guid id)
+        {
+            return _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.ObterFornecedorProdutosEndereco(id));
         }
     }
 }

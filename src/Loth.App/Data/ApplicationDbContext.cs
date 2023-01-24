@@ -11,5 +11,6 @@ namespace Loth.App.Data
         {
         }       
         public DbSet<Loth.App.ViewModels.ProdutoViewModel> ProdutoViewModel { get; set; }
+        public DbSet<Loth.App.ViewModels.EnderecoViewModel> EnderecoViewModel { get; set; }
     }
 }

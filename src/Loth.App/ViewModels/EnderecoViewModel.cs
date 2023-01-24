@@ -1,6 +1,7 @@
 ﻿using AppLothMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Loth.App.ViewModels
 {
@@ -34,8 +35,10 @@ namespace Loth.App.ViewModels
         [StringLength(50, ErrorMessage = "O Campo precisa ter entre 2 e 50 caracteres", MinimumLength = 2)]
         public string Estado { get; set; }
 
-        [HiddenInput]
+        [HiddenInput]        
         public Guid FornecedorId { get; set; }
+
+        //[NotMapped]
         public FornecedorViewModel Fornecedor { get; set; }
     }
 }

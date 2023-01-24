@@ -29,3 +29,4 @@ SEMPRE TER AS MESMAS VERSOES DOS PACOTES ENTITY
 	5.1 Instanciar a Interface de repositório da respectiva Model, ex, Fornecedor Controller recebe o IFornecedorRepository e injetar, fzd injeção de dependencia do repositorio no Construtor
 	5.2 na Controller, tbm injetar o Automapper, e no return da Action mapear a ViewModel, ex //return View(_mapper.Map<IEnumerable<FornecedorViewModel>> (await _fornecedorRepository.ObterTodos()));
 
+6. Customizar e ajustar as Views, por ex: Criar uma partial View Endereco 

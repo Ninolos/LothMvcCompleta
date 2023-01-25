@@ -1,6 +1,7 @@
 ﻿using AppLothMVC.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Loth.App.ViewModels
 {
@@ -19,10 +20,14 @@ namespace Loth.App.ViewModels
 
         [DisplayName("Tipo")]
         public int TipoFornecedor { get; set; }
+
+        //[NotMapped]
         public EnderecoViewModel Endereco { get; set; }
 
         [DisplayName("Ativo?")]
-        public bool Ativo { get; set; }        
+        public bool Ativo { get; set; }
+
+        //[NotMapped]
         public IEnumerable<ProdutoViewModel> Produtos { get; set; }
     }
 }

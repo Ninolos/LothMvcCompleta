@@ -62,9 +62,18 @@ namespace Loth.App.Controllers
                 return View(produtoViewModel);
             }
 
-            await _produtoRepository.Adicionar(_mapper.Map<Produto>(produtoViewModel));           
-            
-            return View(produtoViewModel);
+            var imgPrefixo = Guid.NewGuid() + "_";
+
+            if(!await UploadArquivo(produtoViewModel.ImagemUpload, imgPrefixo))
+            {
+                return View(produtoViewModel);
+            }
+
+            produtoViewModel.Imagem = imgPrefixo + produtoViewModel.ImagemUpload.FileName;
+
+            await _produtoRepository.Adicionar(_mapper.Map<Produto>(produtoViewModel));
+
+            return RedirectToAction("Index");
         }
         
         public async Task<IActionResult> Edit(Guid id)
@@ -88,12 +97,36 @@ namespace Loth.App.Controllers
                 return NotFound();
             }
 
+            //pega os dados originais e atribui ao que não veio no formulario
+            var produtoAtualizacao = await ObterProduto(id);
+            produtoViewModel.Fornecedor = produtoAtualizacao.Fornecedor;
+            produtoViewModel.Imagem = produtoAtualizacao.Imagem;
+
             if (!ModelState.IsValid)
             {                
                 return View(produtoViewModel);
             }
 
-            await _produtoRepository.Atualizar(_mapper.Map<Produto>(produtoViewModel));
+            if (produtoViewModel.ImagemUpload != null)
+            {
+                var imgPrefixo = Guid.NewGuid() + "_";
+
+                if(!await UploadArquivo(produtoViewModel.ImagemUpload, imgPrefixo))
+                {
+                    return View(produtoViewModel);
+                }
+
+                produtoAtualizacao.Imagem = imgPrefixo + produtoViewModel.ImagemUpload.FileName;
+
+            }
+
+            //atribui os valores novos que vieram do formulario
+            produtoAtualizacao.Nome = produtoViewModel.Nome;
+            produtoAtualizacao.Descricao = produtoViewModel.Descricao;
+            produtoAtualizacao.Valor = produtoViewModel.Valor;
+            produtoAtualizacao.Ativo = produtoViewModel.Ativo;
+
+            await _produtoRepository.Atualizar(_mapper.Map<Produto>(produtoAtualizacao));
             
             return RedirectToAction("Index");
         }
@@ -142,5 +175,30 @@ namespace Loth.App.Controllers
             return produto;
         }
 
+        private async Task<bool> UploadArquivo(IFormFile arquivo, string imgPrefixo)
+        {
+            if(arquivo.Length <= 0)
+            {
+                return false;
+            }
+
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagens", imgPrefixo + arquivo.FileName);
+
+            if (System.IO.File.Exists(path))
+            {
+                ModelState.AddModelError(string.Empty, "Arquivo ja existe!");
+                return false;
+            }
+
+
+            //cria o arquivo e grava no disco
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await arquivo.CopyToAsync(stream);
+            }
+
+            return true;
+
+        }
     }
 }

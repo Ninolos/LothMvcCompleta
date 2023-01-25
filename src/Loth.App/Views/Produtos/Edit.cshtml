@@ -1,10 +1,10 @@
 ﻿@model Loth.App.ViewModels.ProdutoViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Produto" + Model.Nome;
 }
 
-<h1>Edit</h1>
+<h1>@ViewData["Title"]</h1>
 
 <h4>ProdutoViewModel</h4>
 <hr />
@@ -12,12 +12,9 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="FornecedorId" class="control-label"></label>
-                <select asp-for="FornecedorId" class="form-control" asp-items="ViewBag.FornecedorId"></select>
-                <span asp-validation-for="FornecedorId" class="text-danger"></span>
-            </div>
+            
             <div class="form-group">
                 <label asp-for="Nome" class="control-label"></label>
                 <input asp-for="Nome" class="form-control" />
@@ -25,11 +22,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="Descricao" class="control-label"></label>
-                <input asp-for="Descricao" class="form-control" />
+                <textarea cols="40" rows="5" asp-for="Descricao" class="form-control"></textarea>
                 <span asp-validation-for="Descricao" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Imagem" class="control-label"></label>
+                <label>Imagem Atual</label><br />
+                <img src="~/imagens/@Model.Imagem" alt="@Model.Imagem" style="width:70px; height:100px" />
                 <input asp-for="Imagem" class="form-control" />
                 <span asp-validation-for="Imagem" class="text-danger"></span>
             </div>
@@ -44,7 +42,7 @@
                 </label>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Salvar" class="btn btn-primary" />
             </div>
         </form>
     </div>

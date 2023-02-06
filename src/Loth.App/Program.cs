@@ -4,6 +4,7 @@ using Loth.Data.Context;
 using Loth.Data.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +51,16 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+var defaultCUlture = new CultureInfo("pt-BR");
+var localiztionOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture(defaultCUlture),
+    SupportedCultures = new List<CultureInfo> { defaultCUlture },
+    SupportedUICultures = new List<CultureInfo> { defaultCUlture }
+};
+
+app.UseRequestLocalization(localiztionOptions);
 
 app.MapControllerRoute(
     name: "default",

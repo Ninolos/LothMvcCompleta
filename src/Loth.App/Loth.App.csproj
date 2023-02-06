@@ -14,6 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\imagens\0b228139-47e3-4158-a26f-4b6bf44a1bb7_2023-planejamento-de-ano-novo-e-desafio-oportunidade-de-estrategia-de-negocios-esperanca-nova-mudanca-de-vida-metas-de-ano-novo-2023-em-cubos-estrategia-de-plano-de-metas-conceito-de-acao-de-ideia.webp" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="automapper.extensions.microsoft.dependencyinjection" Version="12.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.9" />

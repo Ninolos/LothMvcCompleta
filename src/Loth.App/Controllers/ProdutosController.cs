@@ -172,6 +172,8 @@ namespace Loth.App.Controllers
 
             if (!OperacaoValida()) return View(produto);
 
+            TempData["Sucesso"] = "Produto Excluído com Sucesso";
+
             return RedirectToAction("Index");
         }
 

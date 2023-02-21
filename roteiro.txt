@@ -42,3 +42,6 @@ SEMPRE TER AS MESMAS VERSOES DOS PACOTES ENTITY
 	9.4 Criar em Validations classes para validaçao, que usam o FluentValidation, usar os Validations em Services para Validar no lado do Servidor os campos nao preenchidos ou incorretos
 	9.5 Em BaseService eu implemento os metodos para Notificar, aplicar tbm um metodo Generico ExecutarValidacao, para usar em todos os Services tbm usando o FluentValidation
 10. Criar uma Interface de INotificador com os metodos de tratamento para Notificadao, uma classe Notificador que implementa esse interface e uma classe de Notificacao
+
+11. Criar em Extensions um ViewComponent para mostrar as Notificacoes na Client Side,
+	11.1 dentro de Shared, cria uma View Default dentro de uma pasta components, uma View para os erros, e chamar elas nas Views das Actions para mostrar as notificacoes

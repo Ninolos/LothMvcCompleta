@@ -1,3 +1,4 @@
+using Loth.App.Configurations;
 using Loth.App.Data;
 using Loth.Business.Interfaces;
 using Loth.Data.Context;
@@ -25,10 +26,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddScoped<LothDbContext>();
-builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
-builder.Services.AddScoped<IFornecedorRepository, FornecedorRepository>();
-builder.Services.AddScoped<IEnderecoRepository, EnderecoRepository>();
+builder.Services.ResolveDependencies();
 
 var app = builder.Build();
 

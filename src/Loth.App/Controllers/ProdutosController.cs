@@ -20,7 +20,7 @@ namespace Loth.App.Controllers
         private readonly IFornecedorRepository _fornecedorRepository;
         private readonly IMapper _mapper;
 
-        public ProdutosController(IProdutoRepository produtoRepository, IMapper mapper, IFornecedorRepository fornecedorRepository, IProdutoService produtoService)
+        public ProdutosController(IProdutoRepository produtoRepository, IMapper mapper, IFornecedorRepository fornecedorRepository, IProdutoService produtoService, INotificador notificador) : base(notificador)
         {
             _produtoRepository = produtoRepository;
             _mapper = mapper;
@@ -79,6 +79,8 @@ namespace Loth.App.Controllers
 
             await _produtoService.Adicionar(_mapper.Map<Produto>(produtoViewModel));
 
+            if (!OperacaoValida()) return View(produtoViewModel);
+
             return RedirectToAction("Index");
         }
 
@@ -135,7 +137,9 @@ namespace Loth.App.Controllers
             produtoAtualizacao.Ativo = produtoViewModel.Ativo;
 
             await _produtoService.Atualizar(_mapper.Map<Produto>(produtoAtualizacao));
-            
+
+            if (!OperacaoValida()) return View(produtoViewModel);
+
             return RedirectToAction("Index");
         }
 
@@ -165,7 +169,9 @@ namespace Loth.App.Controllers
             }
 
             await _produtoService.Remover(id);
-                        
+
+            if (!OperacaoValida()) return View(produto);
+
             return RedirectToAction("Index");
         }
 

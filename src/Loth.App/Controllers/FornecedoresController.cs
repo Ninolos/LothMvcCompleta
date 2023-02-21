@@ -3,17 +3,20 @@ using Loth.App.ViewModels;
 using Loth.Business.Interfaces;
 using AutoMapper;
 using AppLothMVC.Models;
+using Loth.Data.Repository;
 
 namespace Loth.App.Controllers
 {    
     public class FornecedoresController : BaseController
     {
         private readonly IFornecedorRepository _fornecedorRepository;
+        private readonly IEnderecoRepository _enderecoRepository;
         private readonly IMapper _mapper;
 
-        public FornecedoresController(IFornecedorRepository fornecedorRepository,
+        public FornecedoresController(IFornecedorRepository fornecedorRepository, IEnderecoRepository enderecoRepository,
                                         IMapper mapper)
         {
+            _enderecoRepository = enderecoRepository;
             _fornecedorRepository = fornecedorRepository;
             _mapper = mapper;
         }      
@@ -119,6 +122,35 @@ namespace Loth.App.Controllers
             
             return RedirectToAction("Index");
         }        
+
+        public async Task<IActionResult> AtualizarEndereco(Guid id)
+        {
+            var fornecedor = await ObterFornecedorEndereco(id);
+
+            if(fornecedor == null)
+            {
+                return NotFound();
+            }
+
+            FornecedorViewModel fornecedorViewModel = new FornecedorViewModel();
+            fornecedorViewModel.Endereco = fornecedor.Endereco;
+
+            return PartialView("_AtualizarEndereco", fornecedorViewModel);
+        }
+                
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AtualizarEndereco(FornecedorViewModel fornecedorViewModel)
+        {            
+
+            if (!ModelState.IsValid) return PartialView("_AtualizarEndereco", fornecedorViewModel);
+
+            await _enderecoRepository.Atualizar(_mapper.Map<Endereco>(fornecedorViewModel.Endereco));            
+
+            var url = Url.Action("ObterEndereco", "Fornecedores", new { id = fornecedorViewModel.Endereco.FornecedorId });
+            return Json(new { success = true, url });
+        }
+
 
         //Metodo para retornar sempre o Fornecedor e Endereco por id, usado nos outros metodos
         private async Task<FornecedorViewModel> ObterFornecedorEndereco(Guid id)

@@ -30,3 +30,18 @@ SEMPRE TER AS MESMAS VERSOES DOS PACOTES ENTITY
 	5.2 na Controller, tbm injetar o Automapper, e no return da Action mapear a ViewModel, ex //return View(_mapper.Map<IEnumerable<FornecedorViewModel>> (await _fornecedorRepository.ObterTodos()));
 
 6. Customizar e ajustar as Views, por ex: Criar uma partial View Endereco , baixar biblioteca fonts-awesome para icones, na camada App adicionar a Client side library fonts-awesome
+
+7. Aplicar o Route nas Actions das Controllers.
+
+8. Colocar em Configurations as configs feitas no Startup
+
+9. Fazer os Services na camada de Business, 
+	9.1 criar os services para cada Controller. 
+	9.2 aplicar para os Services Interfaces que criam o Contrato dos metodos, os Services sao para Implementar os metodos de Escrita no banco, Adicionar, atualizar etc
+	9.3 Instalar o Fluent Validation //Install-Package FluentValidation na camada de BUSINESS
+	9.4 Criar em Validations classes para validaçao, que usam o FluentValidation, usar os Validations em Services para Validar no lado do Servidor os campos nao preenchidos ou incorretos
+	9.5 Em BaseService eu implemento os metodos para Notificar, aplicar tbm um metodo Generico ExecutarValidacao, para usar em todos os Services tbm usando o FluentValidation
+10. Criar uma Interface de INotificador com os metodos de tratamento para Notificadao, uma classe Notificador que implementa esse interface e uma classe de Notificacao
+
+11. Criar em Extensions um ViewComponent para mostrar as Notificacoes na Client Side,
+	11.1 dentro de Shared, cria uma View Default dentro de uma pasta components, uma View para os erros, e chamar elas nas Views das Actions para mostrar as notificacoes

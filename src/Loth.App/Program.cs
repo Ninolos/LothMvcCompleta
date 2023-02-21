@@ -1,9 +1,11 @@
+using Loth.App.Configurations;
 using Loth.App.Data;
 using Loth.Business.Interfaces;
 using Loth.Data.Context;
 using Loth.Data.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,10 +26,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddScoped<LothDbContext>();
-builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
-builder.Services.AddScoped<IFornecedorRepository, FornecedorRepository>();
-builder.Services.AddScoped<IEnderecoRepository, EnderecoRepository>();
+builder.Services.ResolveDependencies();
 
 var app = builder.Build();
 
@@ -50,6 +49,16 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+var defaultCUlture = new CultureInfo("pt-BR");
+var localiztionOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture(defaultCUlture),
+    SupportedCultures = new List<CultureInfo> { defaultCUlture },
+    SupportedUICultures = new List<CultureInfo> { defaultCUlture }
+};
+
+app.UseRequestLocalization(localiztionOptions);
 
 app.MapControllerRoute(
     name: "default",

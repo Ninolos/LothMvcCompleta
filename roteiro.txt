@@ -30,3 +30,13 @@ SEMPRE TER AS MESMAS VERSOES DOS PACOTES ENTITY
 	5.2 na Controller, tbm injetar o Automapper, e no return da Action mapear a ViewModel, ex //return View(_mapper.Map<IEnumerable<FornecedorViewModel>> (await _fornecedorRepository.ObterTodos()));
 
 6. Customizar e ajustar as Views, por ex: Criar uma partial View Endereco , baixar biblioteca fonts-awesome para icones, na camada App adicionar a Client side library fonts-awesome
+
+7. Aplicar o Route nas Actions das Controllers.
+
+8. Colocar em Configurations as configs feitas no Startup
+
+9. Fazer os Services na camada de Business, 
+	9.1 criar os services para cada Controller. 
+	9.2 aplicar para os Services Interfaces que criam o Contrato dos metodos, os Services sao para Implementar os metodos de Escrita no banco, Adicionar, atualizar etc
+	9.3 Instalar o Fluent Validation //Install-Package FluentValidation na camada de BUSINESS
+	9.4 Criar em Validations classes para validaçao, que usam o FluentValidation, para Validar no lado do Servidos os campos nao preenchidos ou incorretos

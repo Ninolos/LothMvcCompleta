@@ -38,7 +38,7 @@ namespace Loth.App.ViewModels
         [HiddenInput]        
         public Guid FornecedorId { get; set; }
 
-        //[NotMapped]
+        [NotMapped]
         public FornecedorViewModel Fornecedor { get; set; }
     }
 }

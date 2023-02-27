@@ -10,9 +10,12 @@ using Loth.App.ViewModels;
 using Loth.Business.Interfaces;
 using AutoMapper;
 using AppLothMVC.Models;
+using Microsoft.AspNetCore.Authorization;
+using Loth.App.Extensions;
 
 namespace Loth.App.Controllers
 {
+    [Authorize]
     public class ProdutosController : BaseController
     {
         private readonly IProdutoRepository _produtoRepository;
@@ -28,12 +31,14 @@ namespace Loth.App.Controllers
             _produtoService = produtoService;
         }
 
+        [AllowAnonymous]
         [Route("lista-de-produtos")]
         public async Task<IActionResult> Index()
         {
             return View(_mapper.Map<IEnumerable<ProdutoViewModel>>(await _produtoRepository.ObterProdutosFornecedores()));
         }
 
+        [AllowAnonymous]
         [Route("dados-do-produto/{id:guid}")]
         public async Task<IActionResult> Details(Guid id)
         {
@@ -48,6 +53,7 @@ namespace Loth.App.Controllers
             return View(produtoViewModel);
         }
 
+        [ClaimsAuthorize("Produtos","Adicionar")]
         [Route("novo-produto")]
         public async Task<IActionResult> Create()
         {
@@ -56,6 +62,7 @@ namespace Loth.App.Controllers
             return View(produtoViewModel);
         }
 
+        [ClaimsAuthorize("Produtos", "Adicionar")]
         [Route("novo-produto")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -84,6 +91,7 @@ namespace Loth.App.Controllers
             return RedirectToAction("Index");
         }
 
+        [ClaimsAuthorize("Produtos", "Editar")]
         [Route("editar-produto/{id:guid}")]
         public async Task<IActionResult> Edit(Guid id)
         {          
@@ -97,6 +105,7 @@ namespace Loth.App.Controllers
             return View(produtoViewModel);
         }
 
+        [ClaimsAuthorize("Produtos", "Editar")]
         [Route("editar-produto/{id:guid}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -143,6 +152,7 @@ namespace Loth.App.Controllers
             return RedirectToAction("Index");
         }
 
+        [ClaimsAuthorize("Produtos", "Excluir")]
         [Route("excluir-produto/{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -156,6 +166,7 @@ namespace Loth.App.Controllers
             return View(produto);
         }
 
+        [ClaimsAuthorize("Produtos", "Excluir")]
         [Route("excluir-produto/{id:guid}")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

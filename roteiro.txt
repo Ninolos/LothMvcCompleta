@@ -45,3 +45,5 @@ SEMPRE TER AS MESMAS VERSOES DOS PACOTES ENTITY
 
 11. Criar em Extensions um ViewComponent para mostrar as Notificacoes na Client Side,
 	11.1 dentro de Shared, cria uma View Default dentro de uma pasta components, uma View para os erros, e chamar elas nas Views das Actions para mostrar as notificacoes
+12.Criar classe CustomAuthorization para cuidar das autorizaçoes e autenticaçoes do Identity
+	12.1 Adicionar nas actions da Controller as Claims e suas permissoes, com o ClaimsAuthorize

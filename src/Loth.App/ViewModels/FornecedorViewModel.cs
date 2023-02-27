@@ -21,13 +21,13 @@ namespace Loth.App.ViewModels
         [DisplayName("Tipo")]
         public int TipoFornecedor { get; set; }
 
-        //[NotMapped]
+        [NotMapped]
         public EnderecoViewModel Endereco { get; set; }
 
         [DisplayName("Ativo?")]
         public bool Ativo { get; set; }
 
-        //[NotMapped]
+        [NotMapped]
         public IEnumerable<ProdutoViewModel> Produtos { get; set; }
     }
 }

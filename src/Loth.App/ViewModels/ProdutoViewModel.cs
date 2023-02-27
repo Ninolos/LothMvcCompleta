@@ -24,7 +24,7 @@ namespace Loth.App.ViewModels
         public string Descricao { get; set; }
 
         [DisplayName("Adicionar Imagem")]
-        //[NotMapped]
+        [NotMapped]
         public IFormFile ImagemUpload { get; set; }
         public string Imagem { get; set; }
 
@@ -37,10 +37,10 @@ namespace Loth.App.ViewModels
         [DisplayName("Ativo?")]
         public bool Ativo { get; set; }
 
-        //[NotMapped]
+        [NotMapped]
         public FornecedorViewModel Fornecedor { get; set; }
 
-        //[NotMapped]
+        [NotMapped]
         public IEnumerable<FornecedorViewModel> Fornecedores { get; set; }
     }
 }

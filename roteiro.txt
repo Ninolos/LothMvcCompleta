@@ -20,10 +20,10 @@ SEMPRE TER AS MESMAS VERSOES DOS PACOTES ENTITY
 				builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 
 4. Mapear as Models para ViewModels com autoMapper, feito para nao jogar as Models direto na View pq a Model é uma entidade de negocio entao o ideial é vc mexer ex: DataAnnotations na VM
-		4.1 fazer as ViewModels com base nas models e colocar os DataAnnotations
-		4.2 instalar o AutoMapper na camada de apresentação install-Package automapper.extensions.microsoft.dependencyinjection
-		4.3 configurar o AutoMapper na StartUp, //builder.Services.AddAutoMapper(typeof(Program));
-		4.4 Criar uma classe para Configurar o AutoMapper
+	4.1 fazer as ViewModels com base nas models e colocar os DataAnnotations
+	4.2 instalar o AutoMapper na camada de apresentação install-Package automapper.extensions.microsoft.dependencyinjection
+	4.3 configurar o AutoMapper na StartUp, //builder.Services.AddAutoMapper(typeof(Program));
+	4.4 Criar uma classe para Configurar o AutoMapper
 
 5. Scaffolding Controllers e Views, utilizar um contexto e usar como Model as VIEWMODELS
 	5.1 Instanciar a Interface de repositório da respectiva Model, ex, Fornecedor Controller recebe o IFornecedorRepository e injetar, fzd injeção de dependencia do repositorio no Construtor
@@ -47,3 +47,4 @@ SEMPRE TER AS MESMAS VERSOES DOS PACOTES ENTITY
 	11.1 dentro de Shared, cria uma View Default dentro de uma pasta components, uma View para os erros, e chamar elas nas Views das Actions para mostrar as notificacoes
 12.Criar classe CustomAuthorization para cuidar das autorizaçoes e autenticaçoes do Identity
 	12.1 Adicionar nas actions da Controller as Claims e suas permissoes, com o ClaimsAuthorize
+	12.2 criar classe em extensions para apagar elementos da tela conforme as claims criando os proprios TagHelpers
